@@ -18,23 +18,6 @@ resource "aws_launch_configuration" "upr-launch-config-1" {
     }
 }
 
-/*
-resource "aws_instance" "upr-1" {
-    ami = "ami-81cefcfd"
-    instance_type = "t2.micro"
-    vpc_security_group_ids = ["${aws_security_group.upr1-example-sg.id}"]    
-
-    user_data = <<-EOF
-                #!/bin/bash
-                echo "Hello World" > index.html
-                nohup busybox httpd -f -p "${var.server_port}" &
-                EOF
-     tags {
-        name = "upr-1-example"
-    }
-}
-*/
-
 resource "aws_security_group" "upr1-example-sg" {
     name = "terraform_example_instance"
 
@@ -106,13 +89,4 @@ resource "aws_security_group" "upr1-elb-sg" {
 }
 
 data "aws_availability_zones" "all" {
-}
-
-variable "server_port" {
-    description = "The port that server binds to"
-    default = 8080
-}
-
-output "elb_dns_name" {
-    value = "${aws_elb.upr1-elb.dns_name}"
 }
