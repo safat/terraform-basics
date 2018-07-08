@@ -9,4 +9,5 @@ resource "aws_db_instance" "upr1-db" {
   name = "${var.db_name}"
   username = "${var.db_uname}"
   password = "${var.db_password}"
+  skip_final_snapshot = true
 }
