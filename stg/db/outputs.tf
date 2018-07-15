@@ -1,7 +1,11 @@
 output "db_address" {
-  value = "${aws_db_instance.upr1-db.address}"
+  value = "${module.db.db_address}"
 }
 
 output "db_port" {
-  value = "${aws_db_instance.upr1-db.port}"
+  value = "${module.db.db_port}"
+}
+
+output "sample_output" {
+  value = "${module.db.sample_output}"
 }

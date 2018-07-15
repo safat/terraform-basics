@@ -4,6 +4,6 @@ terraform {
     bucket = "tf-upr-state"
     dynamodb_table = "terraform-state-lock-dynamo"
     region = "ap-southeast-1"
-    key = "stg-db-terraform.tfstate"
+    key = "webserver-stg-terraform.tfstate"
   }
 }

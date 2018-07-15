@@ -1,3 +1,7 @@
+variable "env" {
+  description = "Name of the environment (stg, dev, prd)"
+}
+
 variable "db_uname" {
   description = "Database User Name"
 }
@@ -12,12 +16,8 @@ variable "db_storage" {
 
 variable "db_instance_type" {
   description = "Instance type of the Database"
-
-  default = "db.t2.micro"
 }
 
 variable "db_name" {
   description = "Database Name"
-
-  default = "upr1_db"
 }
