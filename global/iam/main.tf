@@ -27,3 +27,16 @@ resource "aws_iam_user" "example" {
   count = "${length(var.user_names)}"
   name = "${element(var.user_names, count.index)}"
 }
+
+data "aws_iam_policy_document" "cloudwatch_read_only" {
+  statement {
+    effect = "Allow"
+    actions = ["cloudwatch:Describe", "cloudwatch:Get*", "cloudwatch:List*"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "cloudwatch_read_only" {
+  name = "cloudwatch-read-only"
+  policy = "${data.aws_iam_policy_document.cloudwatch_read_only.json}"
+}

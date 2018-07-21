@@ -10,4 +10,5 @@ module "webserver" {
   cluster_name = "upr-web"
   db_remote_state_bucket = "tf-upr-state"
   db_remote_state_key = "stg-db-terraform.tfstate"
+  enable_autoscaling = "false"
 }

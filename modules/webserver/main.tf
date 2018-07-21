@@ -5,6 +5,7 @@ provider aws {
 resource "aws_launch_configuration" "upr-launch-config-1" {
   image_id = "ami-81cefcfd"
   instance_type = "${var.instance_type}"
+  key_name = "${var.key_name}"
   security_groups = [
     "${aws_security_group.upr1-example-sg.id}"]
 
@@ -90,6 +91,64 @@ resource "aws_security_group" "upr1-elb-sg" {
     cidr_blocks = [
       "0.0.0.0/0"]
   }
+}
+
+resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
+  count = "${var.enable_autoscaling == true ? 1 : 0}"
+
+  scheduled_action_name = "scale_out_during_business_hours"
+  min_size = 2
+  max_size = 10
+  desired_capacity = 3
+  recurrence = "0 9 * * *"
+  autoscaling_group_name = "${aws_autoscaling_group.upr1-autoscaling-group.name}"
+}
+
+resource "aws_autoscaling_schedule" "scale_in_at_night" {
+  count = "${var.enable_autoscaling == true ? 1 : 0}"
+
+  scheduled_action_name = "scale_in_at_night"
+  min_size = 2
+  max_size = 10
+  desired_capacity = 2
+  recurrence = "0 17 * * *"
+  autoscaling_group_name = "${aws_autoscaling_group.upr1-autoscaling-group.name}"
+}
+
+resource "aws_cloudwatch_metric_alarm" "hight_cpu_utilization" {
+  alarm_name = "${var.env}-${var.cluster_name}_high_cpu_utilization"
+  namespace = "AWS/EC2"
+  metric_name = "CPUUtilization"
+
+  dimensions = {
+    AutoScalingGroupName = "${aws_autoscaling_group.upr1-autoscaling-group.name}"
+  }
+
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods = 5
+  period = 60
+  statistic = "Average"
+  threshold = 90
+  unit = "Percent"
+}
+
+resource "aws_cloudwatch_metric_alarm" "low_cpu_credit_balance" {
+  count = "${format("%.1s", var.instance_type) == "t" ? 1 : 0}"
+
+  alarm_name = "${var.env}-${var.cluster_name}_low_cpu_credit_balance"
+  namespace = "AWS/EC2"
+  metric_name = "CPUCreditBalance"
+
+  dimensions = {
+    AutoScalingGroupName = "${aws_autoscaling_group.upr1-autoscaling-group.name}"
+  }
+
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods = 5
+  period = 60
+  statistic = "Minimum"
+  threshold = 10
+  unit = "Count"
 }
 
 data "aws_availability_zones" "all" {

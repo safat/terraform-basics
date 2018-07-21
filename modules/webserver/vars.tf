@@ -22,3 +22,12 @@ variable "db_remote_state_bucket" {
 variable "db_remote_state_key" {
   description = "The path for the database's remote state in S3"
 }
+
+variable "enable_autoscaling" {
+  description = "If set to true, enable auto scaling"
+}
+
+variable "key_name" {
+  description = "Name of the SSH Key",
+  default = "cli-southeast-2"
+}
