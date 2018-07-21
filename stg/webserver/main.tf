@@ -11,4 +11,7 @@ module "webserver" {
   db_remote_state_bucket = "tf-upr-state"
   db_remote_state_key = "stg-db-terraform.tfstate"
   enable_autoscaling = "false"
+  min_size = "4"
+  max_size = "10"
+  user_text = "Hello User 7!!!"
 }

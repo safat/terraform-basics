@@ -31,3 +31,15 @@ variable "key_name" {
   description = "Name of the SSH Key",
   default = "cli-southeast-2"
 }
+
+variable "user_text" {
+  description = "Text set by user"
+}
+
+variable "min_size" {
+  description = "Min ASG Size"
+}
+
+variable "max_size" {
+  description = "Max ASG Size"
+}
